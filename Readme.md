@@ -1,3 +1,6 @@
 # CoreData Sample App
 
-https://github.com/irekasoft/CoreDataApp
+Tutorial available [here](http://irekasoft.com/blog/coredata).
+
+Inspired from Realm tutorial on how to make the implementation code of CoreData simpler.
+
