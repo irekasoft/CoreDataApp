@@ -75,24 +75,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   }
   
   func saveToCoreData(_ title: String){
-    
-    let managedContext =
-      CoreDataConnection.sharedInstance.persistentContainer.viewContext
 
-    let entity =
-      NSEntityDescription.entity(forEntityName: CoreDataConnection.kItem,
-                                 in: managedContext)!
-    let item = NSManagedObject(entity: entity,
-                                 insertInto: managedContext)
+    let item = CoreDataConnection.sharedInstance.createManagedObject(entityName: CoreDataConnection.kItem)
     
     item.setValue(title, forKeyPath: "title")
 
-    // 4
-    do {
-      try managedContext.save()
-      itemsFromCoreData.append(item)
-    } catch let error as NSError {
-      print("Could not save. \(error), \(error.userInfo)")
+    CoreDataConnection.sharedInstance.saveDatabase { (success) in
+      print("success \(success)")
+      
+      if (success){
+        itemsFromCoreData.append(item)
+      }
+      
     }
     
   }
@@ -109,10 +103,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   func tableView(_ tableView: UITableView,
                  cellForRowAt indexPath: IndexPath)
     -> UITableViewCell {
+      
       let cell =
         tableView.dequeueReusableCell(withIdentifier:"Cell",
                                       for: indexPath)
       
+
       let item = itemsFromCoreData[indexPath.row] as! Item
       
       cell.textLabel?.text = item.title
@@ -124,10 +120,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   
   
   // MARK: - UITableViewDelegate
-  
+  // Update the 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+    
+    
     print("here \(indexPath.row)")
+    
+    let item = itemsFromCoreData[indexPath.row] as! Item
+    
+    if (item.progress == 0){
+      item.progress = 1
+    }else{
+      item.progress = 0
+    }
+    
+    CoreDataConnection.sharedInstance.saveDatabase { (success) in
+
+      if (success) {
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+      }
+    
+    }
+    
   }
   
   // ViewController.swift
@@ -141,7 +156,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     if (editingStyle == .delete){
       
-      //      tableView.deleteRows(at:[indexPath], with: .automatic)
+      let item = itemsFromCoreData[indexPath.row] as! Item
+      
+      CoreDataConnection.sharedInstance.deleteManagedObject(managedObject: item, completion: { (success) in
+        if (success){
+          
+          itemsFromCoreData.remove(at: indexPath.row)
+          tableView.deleteRows(at:[indexPath], with: .automatic)
+          
+        }
+      })
+      
       
     }
     

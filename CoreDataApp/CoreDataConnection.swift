@@ -19,11 +19,11 @@ class CoreDataConnection: NSObject {
   // MARK: - Core Data stack
   
   lazy var persistentContainer: NSPersistentContainer = {
-
+    
     let container = NSPersistentContainer(name: CoreDataConnection.kFilename)
     container.loadPersistentStores(completionHandler: { (storeDescription, error) in
       if let error = error as NSError? {
-
+        
         fatalError("Unresolved error \(error), \(error.userInfo)")
       }
     })
@@ -43,5 +43,60 @@ class CoreDataConnection: NSObject {
       }
     }
   }
-
+  
+  func createManagedObject( entityName: String )->NSManagedObject {
+    
+    let managedContext =
+      CoreDataConnection.sharedInstance.persistentContainer.viewContext
+    
+    let entity =
+      NSEntityDescription.entity(forEntityName: CoreDataConnection.kItem,
+                                 in: managedContext)!
+    
+    let item = NSManagedObject(entity: entity,
+                               insertInto: managedContext)
+    
+    return item
+    
+  }
+  
+  
+  func saveDatabase(completion:(_ result: Bool ) -> Void) {
+    
+    let managedContext =
+      CoreDataConnection.sharedInstance.persistentContainer.viewContext
+    
+    do {
+      try managedContext.save()
+      
+      completion(true)
+      
+    } catch let error as NSError {
+      print("Could not save. \(error), \(error.userInfo)")
+      completion(false)
+    }
+    
+  }
+  
+  func deleteManagedObject( managedObject: NSManagedObject, completion:(_ result: Bool ) -> Void) {
+    
+    let managedContext =
+      CoreDataConnection.sharedInstance.persistentContainer.viewContext
+    
+    managedContext.delete(managedObject)
+    
+    do {
+      try managedContext.save()
+      
+      completion(true)
+      
+    } catch let error as NSError {
+      print("Could not save. \(error), \(error.userInfo)")
+      completion(false)
+    }
+    
+  }
+  
+  
+  
 }
