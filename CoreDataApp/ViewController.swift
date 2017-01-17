@@ -12,9 +12,33 @@ import CoreData
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-//  var items: [String] = []
-  var itemsFromCoreData: [NSManagedObject] = []
+//  var items: [String] = [] ! Initial Testing 
+  var coreData = CoreDataConnection.sharedInstance
+  
+  
+  var itemsFromCoreData: [NSManagedObject] {
+    
+    get {
+      
+      var resultArray:Array<NSManagedObject>!
+      let managedContext = coreData.persistentContainer.viewContext
+      //2
+      let fetchRequest =
+        NSFetchRequest<NSManagedObject>(entityName: CoreDataConnection.kItem)
+      //3
+      do {
+        resultArray = try managedContext.fetch(fetchRequest)
+      } catch let error as NSError {
+        print("Could not fetch. \(error), \(error.userInfo)")
+      }
+      
+      return resultArray
+    }
+    
+  }
+  
   var items: [String] = []
+  
   
   @IBOutlet weak var tableView: UITableView!
   
@@ -22,24 +46,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
-
-    
   }
+  
+  
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    
-    let managedContext =
-      CoreDataConnection.sharedInstance.persistentContainer.viewContext
-    //2
-    let fetchRequest =
-      NSFetchRequest<NSManagedObject>(entityName: CoreDataConnection.kItem)
-    //3
-    do {
-      itemsFromCoreData = try managedContext.fetch(fetchRequest)
-    } catch let error as NSError {
-      print("Could not fetch. \(error), \(error.userInfo)")
-    }
+ 
     
   }
 
@@ -65,7 +78,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
           return
       }
       self.saveToCoreData(nameToSave)
-      self.tableView.reloadData()
+      
     }
     
     alert.addTextField()
@@ -76,29 +89,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   
   func saveToCoreData(_ title: String){
 
-    let item = CoreDataConnection.sharedInstance.createManagedObject(entityName: CoreDataConnection.kItem)
+    let item = coreData.createManagedObject(entityName: CoreDataConnection.kItem)
     
     item.setValue(title, forKeyPath: "title")
 
-    CoreDataConnection.sharedInstance.saveDatabase { (success) in
-      print("success \(success)")
+    coreData.saveDatabase { (success) in
       
       if (success){
-        itemsFromCoreData.append(item)
+        self.tableView.reloadData()
       }
       
     }
     
   }
+  
+  // MARK: - UITableViewDataSource
 
   func tableView(_ tableView: UITableView,
                  numberOfRowsInSection section: Int) -> Int {
     return itemsFromCoreData.count
   }
   
-  
-  
-  // MARK: - UITableViewDataSource
   
   func tableView(_ tableView: UITableView,
                  cellForRowAt indexPath: IndexPath)
@@ -120,7 +131,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   
   
   // MARK: - UITableViewDelegate
-  // Update the 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     
@@ -135,12 +145,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
       item.progress = 0
     }
     
-    CoreDataConnection.sharedInstance.saveDatabase { (success) in
-
+    coreData.saveDatabase { (success) in
       if (success) {
         tableView.reloadRows(at: [indexPath], with: .automatic)
       }
-    
     }
     
   }
@@ -158,10 +166,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
       
       let item = itemsFromCoreData[indexPath.row] as! Item
       
-      CoreDataConnection.sharedInstance.deleteManagedObject(managedObject: item, completion: { (success) in
+      coreData.deleteManagedObject(managedObject: item, completion: { (success) in
         if (success){
-          
-          itemsFromCoreData.remove(at: indexPath.row)
+
           tableView.deleteRows(at:[indexPath], with: .automatic)
           
         }

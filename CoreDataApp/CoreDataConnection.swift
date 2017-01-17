@@ -50,7 +50,7 @@ class CoreDataConnection: NSObject {
       CoreDataConnection.sharedInstance.persistentContainer.viewContext
     
     let entity =
-      NSEntityDescription.entity(forEntityName: CoreDataConnection.kItem,
+      NSEntityDescription.entity(forEntityName: entityName,
                                  in: managedContext)!
     
     let item = NSManagedObject(entity: entity,
