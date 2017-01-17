@@ -13,6 +13,7 @@
 		A315E0A61DCF6CE70080B537 /* CoreDataApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A315E0A41DCF6CE70080B537 /* CoreDataApp.xcdatamodeld */; };
 		A315E0A81DCF6CE70080B537 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A315E0A71DCF6CE70080B537 /* Assets.xcassets */; };
 		A315E0AB1DCF6CE70080B537 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A315E0A91DCF6CE70080B537 /* LaunchScreen.storyboard */; };
+		A315E0B31DCF70810080B537 /* CoreDataConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A315E0B21DCF70810080B537 /* CoreDataConnection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A315E0A71DCF6CE70080B537 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A315E0AA1DCF6CE70080B537 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A315E0AC1DCF6CE70080B537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A315E0B21DCF70810080B537 /* CoreDataConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataConnection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				A315E09D1DCF6CE70080B537 /* AppDelegate.swift */,
+				A315E0B21DCF70810080B537 /* CoreDataConnection.swift */,
 				A315E09F1DCF6CE70080B537 /* ViewController.swift */,
 				A315E0A11DCF6CE70080B537 /* Main.storyboard */,
 				A315E0A71DCF6CE70080B537 /* Assets.xcassets */,
@@ -143,6 +146,7 @@
 				A315E0A01DCF6CE70080B537 /* ViewController.swift in Sources */,
 				A315E0A61DCF6CE70080B537 /* CoreDataApp.xcdatamodeld in Sources */,
 				A315E09E1DCF6CE70080B537 /* AppDelegate.swift in Sources */,
+				A315E0B31DCF70810080B537 /* CoreDataConnection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
