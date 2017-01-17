@@ -22,10 +22,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
       
       var resultArray:Array<NSManagedObject>!
       let managedContext = coreData.persistentContainer.viewContext
-      //2
       let fetchRequest =
         NSFetchRequest<NSManagedObject>(entityName: CoreDataConnection.kItem)
-      //3
+      
+      let sortDescriptor = NSSortDescriptor(key:"title", ascending: true)
+      
+      fetchRequest.sortDescriptors = [sortDescriptor]
+      
       do {
         resultArray = try managedContext.fetch(fetchRequest)
       } catch let error as NSError {
