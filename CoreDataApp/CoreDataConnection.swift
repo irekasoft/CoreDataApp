@@ -44,7 +44,7 @@ class CoreDataConnection: NSObject {
     }
   }
   
-  func createManagedObject( entityName: String )->NSManagedObject {
+  func createManagedObject(_ entityName: String )->NSManagedObject {
     
     let managedContext =
       CoreDataConnection.sharedInstance.persistentContainer.viewContext

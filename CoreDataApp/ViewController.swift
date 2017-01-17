@@ -92,9 +92,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
   
   func saveToCoreData(_ title: String){
 
-    let item = coreData.createManagedObject(entityName: CoreDataConnection.kItem)
+    let item = coreData.createManagedObject(CoreDataConnection.kItem) as! Item
     
-    item.setValue(title, forKeyPath: "title")
+    item.title = title
 
     coreData.saveDatabase { (success) in
       
